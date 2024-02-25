@@ -19,7 +19,7 @@ class Player(GameSprite):
             self.rect.y += 10
         if keys[K_d] and self.rect.x < 610:
             self.rect.x += 10
-        if keys[K_a] and self.rect.y > 90:
+        if keys[K_a] and self.rect.y > 80:
             self.rect.x -= 10
 
 class Enemy(GameSprite):

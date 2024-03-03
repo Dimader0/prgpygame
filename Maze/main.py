@@ -1,4 +1,7 @@
 from pygame import *
+from time import sleep
+
+init()
 
 class GameSprite(sprite.Sprite):
     def __init__ (self, img, x, y, w, h):
@@ -66,6 +69,9 @@ player = Player("player.png", 10, 390, 60, 80)
 enemy = Enemy("enemy.png", 600, 200, 80, 100)
 
 goal = GameSprite("treasure.png", 550, 400, 80, 60)
+goal2 = GameSprite("treasure.png", 600, 20, 80, 60)
+goal3 = GameSprite("treasure.png", 15, 40, 80, 60)
+goal4 = GameSprite("treasure.png", 220, 250, 80, 60)
 
 w1 = Wall(154, 205, 50, 100, 20, 450, 10)
 w2 = Wall(154, 205, 50, 100, 480, 350, 10)
@@ -84,7 +90,14 @@ mixer.init()
 #mixer.music.load("")
 #mixer.music.play()
 
+goals_col_d = 0
+goals_colect = 0
 hp = 3
+
+font.init()
+font = font.Font(None, 70)
+win = font.render("You win!", True, (235, 215, 0))
+lose = font.render("You lose!", True, (180, 0, 10))
 
 while game:
     for e in event.get():
@@ -93,7 +106,14 @@ while game:
     screen.blit(bg, (0, 0))
     player.draw()
     enemy.draw()
-    goal.draw()
+    if goals_col_d != 1 or not goals_col_d < 1:
+        goal.draw()
+    if goals_col_d != 2 or not goals_col_d < 2:
+        goal2.draw()
+    if goals_col_d != 3 or not goals_col_d < 3:
+        goal3.draw()
+    if goals_col_d != 4 or not goals_col_d < 4:
+        goal4.draw()
     for w in walls:
         w.draw()
 
@@ -108,8 +128,34 @@ while game:
         hp -= 1
         player.set_pos(10, 390)
         if hp == 0:
-            game = False 
+            screen.blit(lose, (200, 200))
+            display.update()
+            sleep(2)
+            game = False
 
+    if sprite.collide_rect(player, goal):
+        goals_col_d += 1
+        goals_colect += 1
+        display.update()
+    if sprite.collide_rect(player, goal2):
+        goals_col_d += 1
+        goals_colect += 1
+        display.update()
+    if sprite.collide_rect(player, goal3):
+        goals_col_d += 1
+        goals_colect += 1
+        display.update()
+    if sprite.collide_rect(player, goal4):
+        goals_col_d += 1
+        goals_colect += 1
+        display.update()
+        
+
+    if goals_colect == 4:
+        screen.blit(win, (200, 200))
+        display.update()
+        sleep(2)
+        game = False
 
     display.update()
     clock.tick(FPS)

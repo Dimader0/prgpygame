@@ -1,4 +1,5 @@
 from pygame import *
+import pygame
 
 class GameSprite(sprite.Sprite):
     def __init__ (self, img, x, y, w, h):
@@ -19,7 +20,7 @@ class Player(GameSprite):
             self.rect.y += 10
         if keys[K_d] and self.rect.x < 610:
             self.rect.x += 10
-        if keys[K_a] and self.rect.y > 80:
+        if keys[K_a] and self.rect.x > 10:
             self.rect.x -= 10
 
 class Enemy(GameSprite):
@@ -52,6 +53,7 @@ mixer.init()
 #mixer.music.load("")
 #mixer.music.play()
 
+
 while game:
     for e in event.get():
         if e.type == QUIT:
@@ -62,6 +64,10 @@ while game:
 
     player.moving()
     enemy.moving()
+
+    if pygame.sprite.collide_rect(player, enemy):
+        print("1")
+
 
     display.update()
     clock.tick(FPS)

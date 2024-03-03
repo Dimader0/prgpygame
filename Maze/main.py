@@ -1,5 +1,4 @@
 from pygame import *
-import pygame
 
 class GameSprite(sprite.Sprite):
     def __init__ (self, img, x, y, w, h):
@@ -15,13 +14,17 @@ class Player(GameSprite):
     def moving(self):
         keys = key.get_pressed()
         if keys[K_w] and self.rect.y > 10:
-            self.rect.y -= 10
+            self.rect.y -= 5
         if keys[K_s] and self.rect.y < 390:
-            self.rect.y += 10
+            self.rect.y += 5
         if keys[K_d] and self.rect.x < 610:
-            self.rect.x += 10
+            self.rect.x += 5
         if keys[K_a] and self.rect.x > 10:
-            self.rect.x -= 10
+            self.rect.x -= 5
+    def set_pos(self, x, y):
+        self.rect.x = x
+        self.rect.y = y
+
 
 class Enemy(GameSprite):
     direction = "left"
@@ -37,13 +40,41 @@ class Enemy(GameSprite):
             self.rect.x -= 5
 
 class Wall(sprite.Sprite):
-    pass
+    def __init__(self, color1, color2, color3, wall_x, wall_y, wall_width, wall_height):
+        super().__init__()
+        self.color1 = color1
+        self.color2 = color2
+        self.color3 = color3
+        
+        self.image = Surface((wall_width, wall_height))
+
+        self.image.fill((color1, color2, color3))
+
+        self.rect = self.image.get_rect()
+
+        self.rect.x = wall_x
+        self.rect.y = wall_y
+
+    def draw(self):
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+
 
 screen = display.set_mode((700, 500))
 display.set_caption("Лабіринт")
 bg = transform.scale(image.load("bg.jpg"), (700, 500))
-player = Player("player.png", 110, 390, 80, 100)
+player = Player("player.png", 10, 390, 60, 80)
 enemy = Enemy("enemy.png", 600, 200, 80, 100)
+
+goal = GameSprite("treasure.png", 550, 400, 80, 60)
+
+w1 = Wall(154, 205, 50, 100, 20, 450, 10)
+w2 = Wall(154, 205, 50, 100, 480, 350, 10)
+w3 = Wall(154, 205, 50, 100, 20, 10, 340)
+w4 = Wall(154, 205, 50, 200, 130, 10, 350)
+w5 = Wall(154, 205, 50, 300, 30, 10, 360)
+w6 = Wall(154, 205, 50, 400, 130, 10, 350)
+
+walls = [w1, w2, w3, w4, w5, w6]
 
 game = True
 clock = time.Clock()
@@ -53,6 +84,7 @@ mixer.init()
 #mixer.music.load("")
 #mixer.music.play()
 
+hp = 3
 
 while game:
     for e in event.get():
@@ -61,12 +93,22 @@ while game:
     screen.blit(bg, (0, 0))
     player.draw()
     enemy.draw()
+    goal.draw()
+    for w in walls:
+        w.draw()
+
+    for w in walls:
+        if sprite.collide_rect(player, w):
+            player.set_pos(10, 390)
 
     player.moving()
     enemy.moving()
 
-    if pygame.sprite.collide_rect(player, enemy):
-        print("1")
+    if sprite.collide_rect(player, enemy):
+        hp -= 1
+        player.set_pos(10, 390)
+        if hp == 0:
+            game = False 
 
 
     display.update()

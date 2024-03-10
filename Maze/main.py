@@ -105,15 +105,11 @@ while game:
             game = False
     screen.blit(bg, (0, 0))
     player.draw()
-    enemy.draw()
-    if goals_col_d != 1 or not goals_col_d < 1:
-        goal.draw()
-    if goals_col_d != 2 or not goals_col_d < 2:
-        goal2.draw()
-    if goals_col_d != 3 or not goals_col_d < 3:
-        goal3.draw()
-    if goals_col_d != 4 or not goals_col_d < 4:
-        goal4.draw()
+    enemy.draw() 
+    goal.draw()
+    goal2.draw()
+    goal3.draw()
+    goal4.draw()
     for w in walls:
         w.draw()
 
@@ -137,21 +133,9 @@ while game:
         goals_col_d += 1
         goals_colect += 1
         display.update()
-    if sprite.collide_rect(player, goal2):
-        goals_col_d += 1
-        goals_colect += 1
-        display.update()
-    if sprite.collide_rect(player, goal3):
-        goals_col_d += 1
-        goals_colect += 1
-        display.update()
-    if sprite.collide_rect(player, goal4):
-        goals_col_d += 1
-        goals_colect += 1
-        display.update()
-        
+   
 
-    if goals_colect == 4:
+    if goals_colect == 1:
         screen.blit(win, (200, 200))
         display.update()
         sleep(2)

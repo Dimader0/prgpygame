@@ -32,15 +32,15 @@ class Player(GameSprite):
 class Enemy(GameSprite):
     direction = "left"
     def moving(self):
-        if self.rect.x <= 470:
+        if self.rect.x <= 420:
             self.direction = "right"
-        if self.rect.x >= 680:
+        if self.rect.x >= 640:
             self.direction = "left"
 
         if self.direction == "right":
-            self.rect.x += 5
+            self.rect.x += 6
         else:
-            self.rect.x -= 5
+            self.rect.x -= 6
 
 class Wall(sprite.Sprite):
     def __init__(self, color1, color2, color3, wall_x, wall_y, wall_width, wall_height):
@@ -71,7 +71,7 @@ enemy = Enemy("enemy.png", 600, 200, 80, 100)
 goal = GameSprite("treasure.png", 550, 400, 80, 60)
 goal2 = GameSprite("treasure.png", 600, 20, 80, 60)
 goal3 = GameSprite("treasure.png", 15, 40, 80, 60)
-goal4 = GameSprite("treasure.png", 220, 250, 80, 60)
+
 
 w1 = Wall(154, 205, 50, 100, 20, 450, 10)
 w2 = Wall(154, 205, 50, 100, 480, 350, 10)
@@ -81,6 +81,7 @@ w5 = Wall(154, 205, 50, 300, 30, 10, 360)
 w6 = Wall(154, 205, 50, 400, 130, 10, 350)
 
 walls = [w1, w2, w3, w4, w5, w6]
+goals = [goal, goal2, goal3]
 
 game = True
 clock = time.Clock()
@@ -90,14 +91,16 @@ mixer.init()
 #mixer.music.load("")
 #mixer.music.play()
 
-goals_col_d = 0
-goals_colect = 0
 hp = 3
 
 font.init()
 font = font.Font(None, 70)
 win = font.render("You win!", True, (235, 215, 0))
 lose = font.render("You lose!", True, (180, 0, 10))
+
+points = 0
+score = font.render(str(points), True, (255, 30, 80))
+
 
 while game:
     for e in event.get():
@@ -106,12 +109,11 @@ while game:
     screen.blit(bg, (0, 0))
     player.draw()
     enemy.draw() 
-    goal.draw()
-    goal2.draw()
-    goal3.draw()
-    goal4.draw()
+    for g in goals:
+        g.draw()
     for w in walls:
         w.draw()
+    screen.blit(score, (0, 0))
 
     for w in walls:
         if sprite.collide_rect(player, w):
@@ -129,17 +131,18 @@ while game:
             sleep(2)
             game = False
 
-    if sprite.collide_rect(player, goal):
-        goals_col_d += 1
-        goals_colect += 1
-        display.update()
-   
-
-    if goals_colect == 1:
-        screen.blit(win, (200, 200))
-        display.update()
-        sleep(2)
-        game = False
+    for g in goals:
+        if sprite.collide_rect(player, g):
+            points += 1
+            goals.remove(g)
+            score = font.render(str(points), True, (255, 30, 80))
+            screen.blit(score, (0, 0))
+            display.update()
+            if points == 3:
+                screen.blit(win, (200, 200))
+                display.update()
+                sleep(2)
+                game = False
 
     display.update()
     clock.tick(FPS)

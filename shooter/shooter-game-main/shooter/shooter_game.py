@@ -28,11 +28,11 @@ class Player(GameSprite):
 
 screen = display.set_mode((700, 500))
 display.set_caption("shooter")
-bg = transform.scale(image.load("galaxy.jpg"), (700, 500))
-ship = Player("rocket.png", 250, 390, 70, 100)
+bg = transform.scale(image.load("./shooter/shooter-game-main/shooter/galaxy.jpg"), (700, 500))
+ship = Player("./shooter/shooter-game-main/shooter/rocket.png", 250, 390, 70, 100)
 
 mixer.init()
-mixer.music.load("space.ogg")
+mixer.music.load("./shooter/shooter-game-main/shooter/space.ogg")
 mixer.music.play()
 
 font.init()

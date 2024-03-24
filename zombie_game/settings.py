@@ -17,7 +17,7 @@ zombie_images = ['./textures/zombie1.png', './textures/zombie2.png', './textures
 bullet_image = './textures/bullet.png'
 
 #Фонове зоображення
-background_imaage = transform.scale(image.load('./textures/background.png'), (win_width, win_height))
+background_image = transform.scale(image.load('./textures/background.png'), (win_width, win_height))
 
 #Звуки
 fire_sound = mixer.Sound('./sounds/fire.ogg')

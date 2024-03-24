@@ -137,12 +137,10 @@ while play:
 
     if score == 100:
         screen.blit(win, (200, 200))
-        sleep(2)
         play = False
     
-    if lost == 40:
+    if lost >= 40:
         screen.blit(lose, (200, 200))
-        sleep(2)
         play = False
 
     display.update()

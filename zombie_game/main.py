@@ -12,6 +12,10 @@ pause = False #Прапорець паузи
 
 level = 1
 
+mixer.init()
+mixer.music.load("./sounds/music.mp3")
+mixer.music.play()
+
 while True:
     #Основний цикл
     for e in event.get():

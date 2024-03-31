@@ -47,3 +47,43 @@ class GameSprite(sprite.Sprite):
             rect = self.label.get_rect()
             win.blit(self.label, (self.rect.centerx - rect.width /2, self.rect.centery + 50))
 
+class Player(GameSprite):
+    def __init__(self, img, x, y, w, h, speed):
+        super().__init__(img, x, y, w, h, speed)
+        self.reload = 0 #затримка між пострілами
+        self.rate = 0 #скорострільність
+        self.max_hp = 100
+        self.hp = 100
+        self.text = f"Здоров'я: {self.hp}/{self.max_hp}"
+
+    def update(self):
+        #Переміщення, поворот та постріл
+        self.hit_box.center = self.rect.center
+        self.label = self.font.render(f"Здоров'я: {self.hp}/{self.max_hp}", True, (100, 50 ,50))
+        
+        keys = key.get_pressed()
+        but = mouse.get_pressed()
+
+        #Переміщення
+        if keys[K_a] and self.rect.x > 0:
+            self.rect.centerx -= self.speed
+        if keys[K_d] and self.rect.x < win_width - self.rect.width:
+            self.rect.centerx += self.speed
+        if keys[K_w] and self.rect.y > 0:
+            self.rect.centery -= self.speed
+        if keys[K_s] and self.rect.y < win_height - self.rect.height:
+            self.rect.centery += self.speed
+        
+        #Постріл та затримка між ними
+        
+        
+
+        #Поворот
+        pos = mouse.get_pos()
+        dx = pos[0] - self.rect.centerx
+        dy = self.rect.centery - pos[1]
+
+        ang = math.degrees(math.atan2(dy, dx))
+
+        self.rotate(ang-90)
+            

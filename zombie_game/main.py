@@ -19,6 +19,13 @@ while True:
     for e in event.get():
         if e.type == QUIT:
             exit()
+        if e.type == KEYDOWN:
+            if e.key == K_p:
+                pause = not pause
+                if pause:
+                    mixer.music.pause()
+                else:
+                    mixer.music.unpause()
 
     display.update()
     clock.tick(FPS)

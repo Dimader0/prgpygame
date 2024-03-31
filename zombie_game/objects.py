@@ -51,7 +51,7 @@ class Player(GameSprite):
     def __init__(self, img, x, y, w, h, speed):
         super().__init__(img, x, y, w, h, speed)
         self.reload = 0 #затримка між пострілами
-        self.rate = 0 #скорострільність
+        self.rate = 5 #скорострільність
         self.max_hp = 100
         self.hp = 100
         self.text = f"Здоров'я: {self.hp}/{self.max_hp}"
@@ -75,8 +75,16 @@ class Player(GameSprite):
             self.rect.centery += self.speed
         
         #Постріл та затримка між ними
-        
-        
+        if but[0]:
+            if self.reload == 0:
+                self.fire()
+                self.reload += 1
+  
+        if self.reload != 0:
+            self.reload += 1
+        if self.reload == self.rate:
+            self.reload = 0
+
 
         #Поворот
         pos = mouse.get_pos()
@@ -86,4 +94,28 @@ class Player(GameSprite):
         ang = math.degrees(math.atan2(dy, dx))
 
         self.rotate(ang-90)
-            
+    
+    def fire(self):
+        #Метод пострілу
+        fire_sound.play()
+        pos = mouse.get_pos()
+        dx = pos[0] - self.rect.centerx
+        dy = self.rect.centery - pos[1]
+        ang = -math.atan2(dy, dx)
+
+        b = Bullet(bullet_image, self.rect.centerx, self.rect.centery, 8, 18, 70, ang)
+        bullets.add(b)
+
+        
+class Bullet(GameSprite):
+    def __init__(self, img, x, y, w, h, speed, angle):
+        super().__init__(img, x, y, w, h, speed)
+        self.angle = angle
+
+    def update(self):
+        #Рух кулі по траекторії під кутом
+        self.hit_box.center = self.rect.center
+        self.rotate(math.degrees(-self.angle)-90) #Поворот кулі в напряямку руху
+        self.rect.x += math.cos(self.angle) * self.speed
+        self.rect.y += math.sin(self.angle) * self.speed
+

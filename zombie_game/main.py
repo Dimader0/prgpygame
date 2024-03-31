@@ -14,6 +14,9 @@ level = 1
 
 mixer.music.play()
 
+player = Player(player_image, 350, 250, 50, 50, 5)
+
+
 while True:
     #Основний цикл
     for e in event.get():
@@ -27,5 +30,9 @@ while True:
                 else:
                     mixer.music.unpause()
 
+
+    player.draw()
+    player.update()
+    win.blit(background_image, (0, 0))
     display.update()
     clock.tick(FPS)

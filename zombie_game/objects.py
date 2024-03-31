@@ -103,7 +103,7 @@ class Player(GameSprite):
         dy = self.rect.centery - pos[1]
         ang = -math.atan2(dy, dx)
 
-        b = Bullet(bullet_image, self.rect.centerx, self.rect.centery, 8, 18, 70, ang)
+        b = Bullet(bullet_image, self.rect.centerx, self.rect.centery, 18, 28, 70, ang)
         bullets.add(b)
 
         

@@ -31,8 +31,13 @@ while True:
                     pg.mixer.music.unpause()
 
 
+    win.blit(background_image, (0, 0))
+
     player.draw()
     player.update()
-    win.blit(background_image, (0, 0))
+    
+    bullets.draw(win)
+    bullets.update()
+
     pg.display.update()
     clock.tick(FPS)

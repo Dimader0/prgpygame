@@ -3,9 +3,9 @@ import math
 
 from settings import *
 
-init()
+pg.init()
 
-class GameSprite(sprite.Sprite):
+class GameSprite(pg.sprite.Sprite):
     #Основний клас спадкоємець від Sprite. Від цього класу створена Куля, Ворог, Гравець
 
     def __init__(self, img, x, y, w, h, speed):
@@ -14,11 +14,11 @@ class GameSprite(sprite.Sprite):
         self.w = w
         self.h = h
         self.speed = speed
-        self.image = transform.scale(image.load(img).convert_alpha(), (w, h))
+        self.image = pg.transform.scale(pg.image.load(img).convert_alpha(), (w, h))
         self.start_image = self.image #Стартове зоображення від якого виконується поворот
         
         #Створення підпису. За замовчуванням вимкнутий
-        self.font = font.Font(None, 30)
+        self.font = pg.font.Font(None, 30)
         self.text = ""
         self.label = self.font.render(self.text, True, (100, 50 , 50))
         self.text_visible = False
@@ -28,16 +28,16 @@ class GameSprite(sprite.Sprite):
         self.rect.center = (x, y)
 
         #Створення хіт-бокс. Прямокутник в два рази менший за стартовий
-        self.hit_box = Rect(self.rect.x, self.rect.y, w/2, h/2)
+        self.hit_box = pg.Rect(self.rect.x, self.rect.y, w/2, h/2)
 
     def change_image(self, new_image):
         #Змінна зоображення на нове
-        self.image = transform.scale(image.load(new_image).convert_alpha(), (self.w, self.h))
+        self.image = pg.transform.scale(pg.image.load(new_image).convert_alpha(), (self.w, self.h))
         self.start_image = self.image
 
     def rotate(self, angle):
         #Поворот спрайта
-        self.image = transform.rotate(self.start_image, angle)
+        self.image = pg.transform.rotate(self.start_image, angle)
         self.rect = self.image.get_rect(center = (self.rect.centerx, self.rect.centery))
     
     def draw(self):
@@ -61,17 +61,17 @@ class Player(GameSprite):
         self.hit_box.center = self.rect.center
         self.label = self.font.render(f"Здоров'я: {self.hp}/{self.max_hp}", True, (100, 50 ,50))
         
-        keys = key.get_pressed()
-        but = mouse.get_pressed()
+        keys = pg.key.get_pressed()
+        but = pg.mouse.get_pressed()
 
         #Переміщення
-        if keys[K_a] and self.rect.x > 0:
+        if keys[pg.K_a] and self.rect.x > 0:
             self.rect.centerx -= self.speed
-        if keys[K_d] and self.rect.x < win_width - self.rect.width:
+        if keys[pg.K_d] and self.rect.x < win_width - self.rect.width:
             self.rect.centerx += self.speed
-        if keys[K_w] and self.rect.y > 0:
+        if keys[pg.K_w] and self.rect.y > 0:
             self.rect.centery -= self.speed
-        if keys[K_s] and self.rect.y < win_height - self.rect.height:
+        if keys[pg.K_s] and self.rect.y < win_height - self.rect.height:
             self.rect.centery += self.speed
         
         #Постріл та затримка між ними
@@ -87,7 +87,7 @@ class Player(GameSprite):
 
 
         #Поворот
-        pos = mouse.get_pos()
+        pos = pg.mouse.get_pos()
         dx = pos[0] - self.rect.centerx
         dy = self.rect.centery - pos[1]
 
@@ -98,7 +98,7 @@ class Player(GameSprite):
     def fire(self):
         #Метод пострілу
         fire_sound.play()
-        pos = mouse.get_pos()
+        pos = pg.mouse.get_pos()
         dx = pos[0] - self.rect.centerx
         dy = self.rect.centery - pos[1]
         ang = -math.atan2(dy, dx)

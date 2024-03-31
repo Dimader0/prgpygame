@@ -1,8 +1,8 @@
 from objects import*
 
-init()
+pg.init()
 
-draw.rect(win, background, UI) #Малювання нижнього прямокутника для інтерфейсу
+pg.draw.rect(win, background, UI) #Малювання нижнього прямокутника для інтерфейсу
 win.blit(background_image, (0, 0)) # Малювання фону
 
 bt_text = ui_font.render("Start", True, (100, 255, 255)) 
@@ -12,27 +12,27 @@ pause = False #Прапорець паузи
 
 level = 1
 
-mixer.music.play()
+pg.mixer.music.play()
 
 player = Player(player_image, 350, 250, 50, 50, 5)
 
 
 while True:
     #Основний цикл
-    for e in event.get():
-        if e.type == QUIT:
+    for e in pg.event.get():
+        if e.type == pg.QUIT:
             exit()
-        if e.type == KEYDOWN:
-            if e.key == K_p:
+        if e.type == pg.KEYDOWN:
+            if e.key == pg.K_p:
                 pause = not pause
                 if pause:
-                    mixer.music.pause()
+                    pg.mixer.music.pause()
                 else:
-                    mixer.music.unpause()
+                    pg.mixer.music.unpause()
 
 
     player.draw()
     player.update()
     win.blit(background_image, (0, 0))
-    display.update()
+    pg.display.update()
     clock.tick(FPS)

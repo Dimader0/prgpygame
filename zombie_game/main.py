@@ -30,14 +30,14 @@ while True:
                 else:
                     pg.mixer.music.unpause()
 
+    if not pause:
+        win.blit(background_image, (0, 0))
 
-    win.blit(background_image, (0, 0))
-
-    player.draw()
-    player.update()
-    
-    bullets.draw(win)
-    bullets.update()
+        player.draw()
+        player.update()
+        
+        bullets.draw(win)
+        bullets.update()
 
     pg.display.update()
     clock.tick(FPS)

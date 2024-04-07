@@ -1,6 +1,8 @@
 import random
 import math
 
+from pygame.sprite import Group
+
 from settings import *
 
 pg.init()
@@ -118,4 +120,91 @@ class Bullet(GameSprite):
         self.rotate(math.degrees(-self.angle)-90) #Поворот кулі в напряямку руху
         self.rect.x += math.cos(self.angle) * self.speed
         self.rect.y += math.sin(self.angle) * self.speed
+
+
+class Enemy(GameSprite):
+    def __init__(self, img, x, y, w, h, speed):
+        super().__init__(img, x, y, w, h, speed)
+        self.max_hp = 1
+        self.hp = self.max_hp
+        self.text = f"Здоров'я: {self.hp}/{self.max_hp}"
+    
+    def spawn(self):
+        self.hp = self.max_hp
+        self.change_image(random.choice(zombie_images))
+        #Випадеове розташування
+        place = random.randint(1, 4)
+
+        if place == 1:
+            self.rect.x = random.randint(0, win_width)
+            self.rect.y = -100
+        elif place == 2:
+            self.rect.x = win_width + 100
+            self.rect.y = random.randint(0, win_height)
+        elif place == 3:
+            self.rect.x = -100
+            self.rect.y = random.randint(0, win_height)
+        elif place == 4:
+            self.rect.x = random.randint(0, win_width)
+            self.rect.y = win_height + 100
+
+    def update(self, angle):
+        #Оновлення руху ворогів
+        self.hit_box.center = self.rect.center
+        self.rotate(math.degrees(-angle)-90) #Поворот ворога в напряямку руху
+        self.rect.x += math.cos(angle) * self.speed
+        self.rect.y += math.sin(angle) * self.speed
+
+
+class Button(pg.sprite.Sprite):
+    def __init__(self, x, y, w, h, color, label, callback = None):
+        super().__init__()
+        #callback - посилання на функцію яка викликається при натиску
+
+        if callback is not None:
+            self.callback = callback
+        else:
+            self.callback = self.cb_fun()
+
+        #Базові властивості
+        self.color = color
+        self.w = w
+        self.h = h
+        self.pressed = False
+
+        #Фон кнопки
+        self.surface = pg.Surface((w, h))
+
+        self.rect = self.surface.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+
+        #Напис кнопки
+        self.label = label
+        label_rect = self.label.get_rect()
+        label_rect.centerx = w/2
+        label_rect.centery = h/2
+        self.surface.fill(self.color)
+        self.surface.blit(label, label_rect)
+
+    def cb_fun(self):
+        print(self.pressed)
+
+    def is_press(self):
+        #Перевірка на натиск та виклик функції callback
+        x, y = pg.mouse.get_pos()
+        bt = pg.mouse.get_pressed()
+
+        if self.rect.collidepoint(x, y) and bt[0] and not self.pressed:
+            self.pressed = True
+            self.callback()
+        
+        if not bt[0]:
+            self.pressed = False
+
+    def update(self):
+        self.is_press()
+    
+    def draw(self):
+        win.blit(self.surface, (self.rect.x, self.rect.y))
 

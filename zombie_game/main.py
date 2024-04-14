@@ -33,7 +33,7 @@ def callback():
     zombies.empty()
 
     for i in range(10):
-        zombie = Enemy(random.choice(zombie_images), 100, 100, 50, 50, 2)
+        zombie = Enemy(random.choice(zombie_images), 100, 100, 50, 50, 1)
         zombie.spawn()
         zombies.add(zombie)
 
@@ -99,6 +99,20 @@ while True:
                     enemy.spawn()
                     scores += 1
 
+        if scores % 15 == 0 and scores != 0 and not boss_round:
+            boss = Enemy(random.choice(zombie_images), - 100, -200, 120, 120, 2)
+            boss.max_hp = 15
+            boss.spawn()
+            zombies.add(boss)
+            boss_round = True
+        elif scores % 30 == 0 and scores != 0:
+            scores += 1
+            level += 1
+            for zombie in zombies:
+                if zombie.max_hp != 15:
+                    zombie.max_hp += 1
+                if level >= 6:
+                    zombie.speed += 1
 
         player.draw()
         player.update()

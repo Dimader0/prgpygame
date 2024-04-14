@@ -39,12 +39,13 @@ def callback():
 
 bt = Button(win_width/2, 100, 100, 50, (50, 50, 100), bt_text, callback=callback)
 
+play = True
 
-while True:
+while play:
     #Основний цикл
     for e in pg.event.get():
         if e.type == pg.QUIT:
-            exit()
+            play = False
         if e.type == pg.KEYDOWN:
             if e.key == pg.K_p:
                 pause = not pause

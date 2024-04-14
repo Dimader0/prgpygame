@@ -14,6 +14,10 @@ level = 1
 
 boss_round = False
 
+scores = 0
+
+player = Player(player_image, 350, 250, 50, 50, 5)
+
 def callback():
     #Зміна всіх значень за замовчуваням
     global finish, player, scores, zombies, boss_round
@@ -78,6 +82,23 @@ while True:
             if math.sqrt((b.rect.x - player.rect.x)**2 + (b.rect.y - player.rect.y)**2) > 1000:
                 b.kill()
                 break    
+        #Робимо перевірку колізії куль та ворогів
+        collide = pg.sprite.groupcollide(bullets, zombies, True, False)
+
+        if collide:
+            enemy = list(collide.values())[0][0]#Дістає ворога до якого доторкнулася куля
+            enemy.hp -= 1
+            if enemy.hp == 0:
+                if enemy.max_hp == 15:
+                    coins_sound.play()
+                    enemy.kill()
+                    boss_round = False
+                    scores += 10
+                else: #Звичайний ворог
+                    coin_sound.play()
+                    enemy.spawn()
+                    scores += 1
+
 
         player.draw()
         player.update()
@@ -85,7 +106,30 @@ while True:
         bullets.draw(win)
         bullets.update()
 
-        
+        pg.draw.rect(win, background, UI) #Малювання прямокутного інтерфейсу
 
+        score_text = ui_font.render(f"Coins: {scores}", True, (150, 200, 50))
+        win.blit(score_text, (win_width - 180, win_height - 45))
+
+        health_text = ui_font.render(f"HP: {player.hp}", True, (255, 50, 50))
+        win.blit(health_text, (0, win_height - 45))  
+
+        if player.hp <= 0:
+            finish = True
+            pg.draw.rect(win, background, UI)
+            lose_text = ui_font.render("You died...", True, (255, 50, 50))
+            win.blit(lose_text, (250, win_height - 45))
+            pg.mixer.music.stop()
+            zombies.empty()
+        else:
+            level_text = ui_font.render(f"Level: {level}", True, (200, 200, 200))
+            win.blit(level_text, (280, win_height - 45))
+
+    else:
+        pg.draw.rect(win, background, UI)
+        pause_text = ui_font.render("Pause", True, (200, 200, 200))
+        win.blit(pause_text, (290, win_height - 45))
+
+   
     pg.display.update()
     clock.tick(FPS)

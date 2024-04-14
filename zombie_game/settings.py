@@ -40,5 +40,5 @@ zombies = pg.sprite.Group()
 ui_font = pg.font.Font(None, 50)
 
 #Інтерфейс
-UI = pg.Rect(0, win_height, win_width, 50)
+UI = pg.Rect(0, win_height - 50, win_width, 50)
 

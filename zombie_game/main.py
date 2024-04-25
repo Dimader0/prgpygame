@@ -24,6 +24,7 @@ def callback():
 
     pg.mixer.music.play()
 
+
     player = Player(player_image, 350, 250, 50, 50, 5)
 
     scores = 0

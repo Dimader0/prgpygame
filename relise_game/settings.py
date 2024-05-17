@@ -16,6 +16,6 @@ scores = 0
 player_image = "player.png"
 enemy_image = "enemy.png"
 
-background_image = pg.transform.scale(pg.image.load("bg.png"), (win_width, win_higth))
+background_image = pg.transform.scale(pg.image.load("bg.jpg"), (win_width, win_higth))
 
 ui_font = pg.font.Font(None, 30)

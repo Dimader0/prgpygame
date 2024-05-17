@@ -39,11 +39,11 @@ class Enemy(GameSprite):
         self.hp = 1
 
     def spawn(self):
-        self.rect.x = win_width + 100
+        self.rect.x = 100
         self.rect.y = random.randint(0, win_higth)
     
     def update(self):
         self.rect.x += self.speed
-        if self.rect.x < 0:
+        if self.rect.x > 700 or self.rect.x < 0:
             self.spawn()
             

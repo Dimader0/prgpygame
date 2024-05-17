@@ -1,13 +1,12 @@
 from classes import *
 
-player = Player(player_image, 200, 250, 100, 130, 5)
+player = Player(player_image, 200, 250, 50, 80, 5)
 
 enemy_list = pg.sprite.Group()
 enemy_list.empty()
 
-for i in range(5):
-    enemy = Enemy(enemy_image, win_width + 100, random.randint(0, win_higth), 100, 130, 2)
-    enemy.spawn()
+enemy = Enemy(enemy_image, 100, random.randint(0, win_higth), 70, 90, 2)
+
 
 while play:
     for e in pg.event.get():

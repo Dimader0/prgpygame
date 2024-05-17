@@ -37,13 +37,35 @@ class Enemy(GameSprite):
     def __init__(self, img, x, y, w, h, speed):
         super().__init__(img, x, y, w, h, speed)
         self.hp = 1
+        
+    direction = "right"
 
     def spawn(self):
-        self.rect.x = 100
+        self.rect.x = 0
         self.rect.y = random.randint(0, win_higth)
     
     def update(self):
+        self.direction = "right"    
         self.rect.x += self.speed
         if self.rect.x > 700 or self.rect.x < 0:
             self.spawn()
+
+class Wall(pg.sprite.Sprite):
+    def __init__(self, color1, color2, color3, wall_x, wall_y, wall_width, wall_height):
+        super().__init__()
+        self.color1 = color1
+        self.color2 = color2
+        self.color3 = color3
+        
+        self.image = pg.Surface((wall_width, wall_height))
+
+        self.image.fill((color1, color2, color3))
+
+        self.rect = self.image.get_rect()
+
+        self.rect.x = wall_x
+        self.rect.y = wall_y
+
+    def draw(self):
+        win.blit(self.image, (self.rect.x, self.rect.y))
             

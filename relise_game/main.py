@@ -8,7 +8,6 @@ enemy_list.empty()
 for i in range(5):
     enemy = Enemy(enemy_image, win_width + 100, random.randint(0, win_higth), 100, 130, 2)
     enemy.spawn()
-    enemy_list.add(enemy)
 
 while play:
     for e in pg.event.get():
@@ -19,8 +18,8 @@ while play:
     player.draw()
     player.update()
 
-    enemy_list.draw(win)
-    enemy_list.update()
+    enemy.draw()
+    enemy.update()
     
 
     pg.display.update()
